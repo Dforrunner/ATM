@@ -1,4 +1,4 @@
-public class Account extends ATM {
+public class Account  {
     int Pin;
 
 }
