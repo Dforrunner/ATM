@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class ATM {
     private int depositAmount;
     private int withdrawAmount;
@@ -46,5 +49,4 @@ public class ATM {
         this.userAuthenticated = userAuthenticated;
     }
 }
-
 

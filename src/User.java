@@ -1,5 +1,15 @@
 public class User {
-    String userName;
+    private String userName;
+    private int userPin;
+    private double accoutnBalance;
+
+    public User() {
+    }
+    public User(String userName, int userPin, double accoutnBalance) {
+        this.userName = userName;
+        this.userPin = userPin;
+        this.accoutnBalance = accoutnBalance;
+    }
 
     public String getUserName() {
         return userName;
@@ -17,6 +27,11 @@ public class User {
         this.userPin = userPin;
     }
 
-    int userPin;
+    public double getAccoutnBalance() {
+        return accoutnBalance;
+    }
 
+    public void setAccoutnBalance(double accoutnBalance) {
+        this.accoutnBalance = accoutnBalance;
+    }
 }
