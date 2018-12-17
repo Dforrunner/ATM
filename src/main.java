@@ -3,12 +3,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+
+/*
+
+This program is currently a simple ATM program. It doesn't necessarily function as a typical ATM, but
+the idea is close to it.
+ */
 public class main {
     public static void main(String[] args){
         ATM ATM = new ATM(); //create ATM object
         User[] user = new User[5];
 
-        //Creating 5 users
+        //Creating 5 users because we will need user accounts in order to validate user info and also provide user info
         user[0] = new User("Bob", 1234, 254.38);
         user[1] = new User("Ali", 0000, 654.50);
         user[2] = new User("Ana", 1111, 6544.44);
