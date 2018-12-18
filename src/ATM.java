@@ -1,52 +1,170 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
+
+/*
+
+This program is currently a simple ATM program. It doesn't necessarily function as a typical ATM because it's more
+like a program that keeps track of your wallet, but I'm calling it an ATM anyways because I might work on it more to make
+it behave more like a ATM.
+ */
 
 public class ATM {
-    private int depositAmount;
-    private int withdrawAmount;
-    private int currentBalance;
     private boolean userAuthenticated;
 
-    public ATM(){}
+    public static void main(String[] args){
+        ATM ATM = new ATM(); //create ATM object
+        User[] user = new User[5]; //Creating an object array of size 5
 
-    public ATM(int depositAmount, int withdrawAmount, int currentBalance, boolean userAuthenticated) {
-        super();
-        this.depositAmount = depositAmount;
-        this.withdrawAmount = withdrawAmount;
-        this.currentBalance = currentBalance;
-        this.userAuthenticated = userAuthenticated;
-    }
+        //Creating 5 users because we will need user accounts in order to validate user info and also provide user info
+        user[0] = new User("Bob", 1234, 254.38);
+        user[1] = new User("Ali", 0000, 654.50);
+        user[2] = new User("Ana", 1111, 6544.44);
+        user[3] = new User("Bee", 2222, 6874.45);
+        user[4] = new User("Liz", 3333, 12540.55);
 
-    public int getDepositAmount() {
-        return depositAmount;
-    }
+        int userIndex = 0; //user index initialized
+        ATM.setUserAuthenticated(false);
+        //Initialize scanner to take user input
+        Scanner sc = new Scanner(System.in);
+        int choice;
+        boolean tryAgain = false;
 
-    public void setDepositAmount(int depositAmount) {
-        this.depositAmount = depositAmount;
-    }
+        //TODO: implement user input validation
 
-    public int getWithdrawAmount() {
-        return withdrawAmount;
-    }
+        //The if statement will check if the user is authenticated if not it will first display login page
+        // If they login successfully then they will gain access to their account info
+        if(!ATM.isUserAuthenticated()) {
+            do {
+                System.out.println("\nWorld Bank ATM" +
+                        "\nPlease choose one of the following options by entering its number:" +
+                        "\n 1 : Login" +
+                        "\n 2 : Exit");
+                System.out.print(" >>> ");
+                choice = sc.nextInt(); //get user input
+                sc.nextLine(); //consume \n. It's necessary because otherwise the scanner will skip the next string input request
 
-    public void setWithdrawAmount(int withdrawAmount) {
-        this.withdrawAmount = withdrawAmount;
-    }
+                if (choice == 1) {
+                    System.out.println("\nPlease enter the info below to gain access:");
+                    //request and get username and pin from the user
+                    System.out.print(" Username: ");
+                    String usernameInput = sc.nextLine();
+                    System.out.print(" Pin: ");
+                    int pinInput = sc.nextInt();
 
-    public int getCurrentBalance() {
-        return currentBalance;
-    }
+                    //TODO: validate user input
+                    //TODO: if validated make userAuthenticated = true else tell user to try again or exit
 
-    public void setCurrentBalance(int currentBalance) {
-        this.currentBalance = currentBalance;
+                    //Loop through the array of users and check to see if the username and pin match with any of the users
+                    // If they match then authenticate user
+                    for (int i = 0; i < user.length; i++) {
+                        if (user[i].getUserName().equals(usernameInput) && user[i].getUserPin() == pinInput) {
+                            ATM.setUserAuthenticated(true);
+                            userIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (!ATM.isUserAuthenticated()) {
+                        System.out.println("\nWrong Username or Pin." +
+                                "\nPlease choose one of the following options:" +
+                                "\n 1 : Try Again" +
+                                "\n 2 : Exit ");
+                        System.out.print(" >>> ");
+                        choice = sc.nextInt();
+                        //TODO: validate user input
+                        if(choice == 2){
+                            System.exit(0);
+                        } else {
+                            tryAgain = true;
+                        }
+                    }
+
+                } else if (choice == 2) { //if the user chooses option 2 exit the program
+                    System.out.print("Goodbye!");
+                    System.exit(0);
+                }
+            }while(tryAgain);
+        }
+
+
+        if(ATM.isUserAuthenticated()){
+
+            do {
+                System.out.println("\nWelcome " + user[userIndex].getUserName() + "!" +  //<------------Greet User
+                        "\n\nYour current balance is: $" + user[userIndex].getAccoutnBalance() + //<----Show them their current balance
+                        "\n\nPlease choose one of the following options by entering its number:" +
+                        "\n 1 : Deposit Money" +
+                        "\n 2 : Withdraw Money" +
+                        "\n 3 : Exit");
+                choice = sc.nextInt(); //get user input
+
+                //Validate user input
+                while (choice != 1 && choice != 2 && choice != 3){
+                    System.out.println("Incorrect input. Please enter 1, 2 or 3." );
+                    choice = sc.nextInt();
+                }
+
+                //TODO: implement the proper methods and statements
+                double balanceBeforeDepositOrWithdraw = user[userIndex].getAccoutnBalance();
+
+                if (choice == 1) {
+
+                    System.out.print("Enter deposit amount: $");
+                    double depositAmount = sc.nextDouble(); //Ask user to enter a deposit amount
+                    //add the amount entered by the user onto the users current balance
+                    user[userIndex].setAccoutnBalance(user[userIndex].getAccoutnBalance() + depositAmount);
+                    //return users current balance
+                    System.out.println("\n Balance before deposit: $" + balanceBeforeDepositOrWithdraw +
+                                       "\n Deposited amount: $" + depositAmount +
+                                       "\n ------------------------------" +
+                                       "\n Total Current Balance: $" + String.format("%.2f", user[userIndex].getAccoutnBalance()));
+
+                } else if (choice == 2) {
+                    boolean enterNewAmount = false;
+                    do {
+                        System.out.print("Enter withdraw amount: $");
+                        double withdrawAmount = sc.nextDouble();
+
+                        if(withdrawAmount < balanceBeforeDepositOrWithdraw) {
+                            user[userIndex].setAccoutnBalance(user[userIndex].getAccoutnBalance() - withdrawAmount);
+                            System.out.println("\n Balance before deposit: $" + balanceBeforeDepositOrWithdraw +
+                                    "\n Withdraw amount: -( $" + withdrawAmount + " )" +
+                                    "\n ------------------------------" +
+                                    "\n Total Current Balance: $" + String.format("%.2f", user[userIndex].getAccoutnBalance()));
+
+                        }else{
+                            System.out.println("\n You don't have enough money in your account." +
+                                               "\n You currently have: $" + balanceBeforeDepositOrWithdraw +
+                                               "\n Would you like to enter a new amount?" +
+                                               "\n 1 : Yes" +
+                                               "\n 2 : No (Exit) ");
+                            System.out.print(" >>> ");
+                            sc.nextLine();
+                            choice = sc.nextInt();
+                            if(choice == 1){
+                                enterNewAmount = true;
+                            }else{
+                                System.out.println("Goodbye!");
+                                System.exit(0);
+                            }
+                        }
+
+                    }while(enterNewAmount == true);
+
+                } else if (choice == 3) {
+                    System.out.println("Goodbye!");
+                }
+
+            }while(choice != 3);
+        }
+
     }
 
     public boolean isUserAuthenticated() {
         return userAuthenticated;
     }
-
     public void setUserAuthenticated(boolean userAuthenticated) {
         this.userAuthenticated = userAuthenticated;
     }
+
 }
 

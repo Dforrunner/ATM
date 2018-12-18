@@ -1,7 +1,7 @@
 public class User {
     private String userName;
     private int userPin;
-    private double accoutnBalance;
+    protected double accoutnBalance;
 
     public User() {
     }
