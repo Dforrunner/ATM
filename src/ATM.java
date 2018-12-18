@@ -99,7 +99,7 @@ public class ATM {
                                 "\n 2 : Exit ");
                         System.out.print(" >>> ");
                         choice = sc.nextInt();
-                        //TODO: validate user input
+                        //TODO: validate user input and handle exceptions
                         if(choice == 2){
                             System.exit(0);
                         } else {
@@ -118,6 +118,7 @@ public class ATM {
         if(ATM.isUserAuthenticated()){
 
             do {
+                //TODO: validate user input and handle exceptions
                 System.out.println("\nWelcome " + user[userIndex].getUserName() + "!" +  //<------------Greet User
                         "\n\nYour current balance is: $" + user[userIndex].getAccoutnBalance() + //<----Show them their current balance
                         "\n\nPlease choose one of the following options by entering its number:" +
@@ -133,9 +134,9 @@ public class ATM {
                     choice = sc.nextInt();
                 }
 
-                //TODO: implement the proper methods and statements
+                // Store user balance before it is deposited or withdrawn from.
+                // The main use of this variable is to show the visual calculation
                 double balanceBeforeDepositOrWithdraw = user[userIndex].getAccoutnBalance();
-
                 if (choice == 1) {
 
                     System.out.print("Enter deposit amount: $");
