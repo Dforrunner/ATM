@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /*
@@ -25,33 +26,61 @@ public class ATM {
         ATM.setUserAuthenticated(false);
         //Initialize scanner to take user input
         Scanner sc = new Scanner(System.in);
-        int choice;
+        int choice = 0;
         boolean tryAgain = false;
-
-        //TODO: implement user input validation
 
         //The if statement will check if the user is authenticated if not it will first display login page
         // If they login successfully then they will gain access to their account info
         if(!ATM.isUserAuthenticated()) {
             do {
-                System.out.println("\nWorld Bank ATM" +
-                        "\nPlease choose one of the following options by entering its number:" +
-                        "\n 1 : Login" +
-                        "\n 2 : Exit");
-                System.out.print(" >>> ");
-                choice = sc.nextInt(); //get user input
-                sc.nextLine(); //consume \n. It's necessary because otherwise the scanner will skip the next string input request
+                try{
+                    System.out.println("\nWorld Bank ATM" +
+                            "\nPlease choose one of the following options by entering its number:" +
+                            "\n 1 : Login" +
+                            "\n 2 : Exit");
+                    System.out.print(" >>> ");
+                    choice = sc.nextInt(); //get user input
+                    sc.nextLine(); //consume \n. It's necessary because otherwise the scanner will skip the next string input request
+
+                    //Validate user input so to make sure they just enter 1 or 2
+                    while(choice != 1 && choice != 2){
+                        System.out.println("Wrong Input. Try Again");
+                        System.out.print(" >>> ");
+                        choice = sc.nextInt();
+                    }
+                }catch (InputMismatchException e){ //catch exception if user enters something other than a int
+
+                    //keep asking the user to for input until they enter an acceptable input which is 1 or 2 in this case
+                    System.out.println("Wrong Input. Try Again");
+                    sc.next();
+                    do{
+                        System.out.print(" >>> ");
+                        choice = sc.nextInt();
+                    }while (choice != 1 && choice != 2);
+                }
 
                 if (choice == 1) {
                     System.out.println("\nPlease enter the info below to gain access:");
-                    //request and get username and pin from the user
-                    System.out.print(" Username: ");
-                    String usernameInput = sc.nextLine();
-                    System.out.print(" Pin: ");
-                    int pinInput = sc.nextInt();
+                    //Initializing user input variables
+                    String usernameInput = "";
+                    int pinInput = 0;
 
-                    //TODO: validate user input
-                    //TODO: if validated make userAuthenticated = true else tell user to try again or exit
+                    // The code block below checks for exceptions
+                    // If no exceptions are thrown the loop exits meaning the inputs are acceptable types
+                    // If they are not then it will keep looping
+                    do {
+                        try {
+                            //request and get username and pin from the user
+                            System.out.print(" Username: ");
+                            usernameInput = sc.nextLine();
+                            System.out.print(" Pin: ");
+                            pinInput = sc.nextInt();
+                        } catch (InputMismatchException e) {
+                            System.out.println("Wrong Input. Try Again");
+                            sc.next();
+                            tryAgain = true;
+                        }
+                    }while (tryAgain == true);
 
                     //Loop through the array of users and check to see if the username and pin match with any of the users
                     // If they match then authenticate user
@@ -95,6 +124,7 @@ public class ATM {
                         "\n 1 : Deposit Money" +
                         "\n 2 : Withdraw Money" +
                         "\n 3 : Exit");
+                System.out.print(" >>> ");
                 choice = sc.nextInt(); //get user input
 
                 //Validate user input
@@ -165,6 +195,5 @@ public class ATM {
     public void setUserAuthenticated(boolean userAuthenticated) {
         this.userAuthenticated = userAuthenticated;
     }
-
 }
 
